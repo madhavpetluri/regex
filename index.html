@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Validation Example</title>
+  <style>
+    body{
+      text-align: center;
+    }
+    fieldset{
+      margin:15% 0% 0% 35%;
+      height: 30vh;
+      width: 30%;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+    input.error-border {
+      border-color: red;
+    }
+    div{
+      margin: 20px 0px;
+    }
+    button:hover{
+      background-color: lightgreen;
+    }
+  </style>
+</head>
+<body>
+  <fieldset>
+  <legend>Registration Form</legend>
+  <form id="registrationForm" onsubmit="return validateForm()">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your Name">
+      <span class="error" id="nameError"></span>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your Email">
+      <span class="error" id="emailError"></span>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password">
+      <span class="error" id="passwordError"></span>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+  </fieldset>
+  <script>
+    function validateForm() {
+      let isValid = true;
+
+      // Clear previous error messages
+      clearErrors();
+
+      // Name validation
+      const name = document.getElementById("name");
+      if (name.value.trim() === "") {
+        setError(name, "nameError", "Name is required.");
+        isValid = false;
+      }
+
+      // Email validation
+      const email = document.getElementById("email");
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(email.value)) {
+        setError(email, "emailError", "Please enter a valid email address.");
+        isValid = false;
+      }
+
+      // Password validation
+      const password = document.getElementById("password");
+      const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+      if (!passwordPattern.test(password.value)) {
+        setError(
+          password,
+          "passwordError",
+          "Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, and one number."
+        );
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function setError(input, errorElementId, message) {
+      const errorElement = document.getElementById(errorElementId);
+      input.classList.add("error-border");
+      errorElement.innerText = message;
+      input.focus();
+    }
+
+    function clearErrors() {
+      document.querySelectorAll(".error").forEach((errorElement) => {
+        errorElement.innerText = "";
+      });
+      document.querySelectorAll("input").forEach((input) => {
+        input.classList.remove("error-border");
+      });
+    }
+  </script>
+</body>
+</html>
